@@ -18,20 +18,21 @@ function init3D() {
 
     // cube
     const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const material = new THREE.MeshBasicMaterial({ color: 0xc7c7c7 });
     cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
     // bgImage
-    // let bgGeometery = new THREE.SphereGeometry(950, 60, 40);
-    let bgGeometery = new THREE.CylinderGeometry(725, 725, 1000, 10, 10, true)
+    let bgGeometery = new THREE.SphereGeometry(5, 60, 40);
+    // let bgGeometery = new THREE.CylinderGeometry(725, 725, 1000, 10, 10, true)
     bgGeometery.scale(-1, 1, 1);
     // has to be power of 2 like (4096 x 2048) or(8192x4096).  i think it goes upside down because texture is not right size
-    let panotexture = new THREE.TextureLoader().load("itp.jpg");
+    let panotexture = new THREE.TextureLoader().load("road.jpg");
     // var material = new THREE.MeshBasicMaterial({ map: panotexture, transparent: true,   alphaTest: 0.02,opacity: 0.3});
     let backMaterial = new THREE.MeshBasicMaterial({ map: panotexture });
 
     let back = new THREE.Mesh(bgGeometery, backMaterial);
+    back.position.set(0, 0, 50);
     scene.add(back);
 
 
