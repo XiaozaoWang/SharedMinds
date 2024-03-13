@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Network</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<script src="https://www.gstatic.com/firebasejs/9.6.8/firebase-app-compat.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/9.6.8/firebase-database-compat.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/9.6.8/firebase-auth-compat.js"></script>
+	</head>
+	<body>
+		<script type="importmap">
+			{
+			  "imports": {
+				"three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+				"three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+			  }
+			}
+		  </script>
+
+		<script type="module">
+
+			import * as THREE from 'three';
+
+			import Stats from 'three/addons/libs/stats.module.js';
+			import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+			let camera, scene, renderer, controls, stats;
+
+			// let mesh;
+			let objs = [];
+			let meshes = [];
+
+			const amount = parseInt( window.location.search.slice( 1 ) ) || 10;
+			// const count = Math.pow( amount, 3 );
+
+			const raycaster = new THREE.Raycaster();
+			const mouse = new THREE.Vector2( 1, 1 );
+
+			const color = new THREE.Color();
+			const white = new THREE.Color().setHex( 0xffffff );
+
+			let db;
+			let group = 'mySpace';
+			let typeOfThing = 'spheres';
+
+
+			connectToFirebase();
+			// setNodes();
+			init();
+			animate();
+
+			
+			function connectToFirebase() {
+				const firebaseConfig = {
+					apiKey: "AIzaSyDj7Hi3T7xxHlAVsuWl9ezOUcbJgGSQ5Tc",
+					authDomain: "week4-9c113.firebaseapp.com",
+					projectId: "week4-9c113",
+					storageBucket: "week4-9c113.appspot.com",
+					messagingSenderId: "987388654884",
+					appId: "1:987388654884:web:aed70edac6b051fc646fb1"
+				};
+				firebase.initializeApp(firebaseConfig);
+				db = firebase.database();
+
+				var myRef = db.ref("group/" + group+ "/" + typeOfThing +"/");
+				myRef.on("child_added", (data) => {
+					console.log("add", data.key, data.val());
+					let key = data.key;
+					let value = data.val();
+					//update our local variable
+					objs.push(value);
+					console.log('!!!!!!', objs.length);
+				});
+
+				myRef.on("child_changed", (data) => {
+					console.log("changed", data.key, data.val());
+				});
+
+				myRef.on("child_removed", (data) => {
+					console.log("removed", data.key);
+				});
+
+				
+			}
+
+			function setNodes() {
+				let i = 0;
+				const offset = ( amount - 1 ) / 2;
+				for ( let x = 0; x < amount; x ++ ) {
+					for ( let y = 0; y < amount; y ++ ) {
+						for ( let z = 0; z < amount; z ++ ) {
+							if (Math.random() > 0.95) {
+								const location = { x: offset - x, y: offset - y, z: offset - z};
+								let meshObj = {
+									location: location,
+									lightened: false,
+									ID: i,
+								}
+								
+								// objs.push(meshObj);
+								// let mydata = {
+								// 	locations: meshObj,
+								// };
+								let dbInfo = db.ref("group/" + group + "/" + typeOfThing +"/").push(meshObj);
+								i++;
+							}
+						}
+					}
+				}
+
+			}
+
+			function init() {
+
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 100 );
+				camera.position.set( 0, 0, 0.1 );
+				camera.lookAt( 0, 0, 0 );
+
+				scene = new THREE.Scene();
+
+				const light = new THREE.HemisphereLight( 0xffffff, 0x888888, 3 );
+				light.position.set( 0, 1, 0 );
+				scene.add( light );
+
+				const geometry = new THREE.IcosahedronGeometry(0.1, 3 );
+
+				console.log("============");
+				console.log(objs.length);
+				for (var obj of objs) {
+					const material = new THREE.MeshPhongMaterial( { color: 0xffffff } );
+					if (obj.lightened) {
+						material.color.set( 0xff0000 );
+					}
+					let mesh = new THREE.Mesh( geometry, material );
+					mesh.position.set( obj.location.x, obj.location.y, obj.location.z );
+					mesh.userData.uuid = obj.ID;
+					scene.add( mesh );
+					console.log("mesh added");
+					meshes.push(mesh);
+				}
+				// for (let i = 0; i < objs.length; i++) {
+				// 	const meshObj = objs[i];
+				// 	const material = new THREE.MeshPhongMaterial( { color: 0xffffff } );
+				// 	if (meshObj.lightened) {
+				// 		meshObj.material.color.set( 0xff0000 );
+				// 	}
+
+				// 	let mesh = new THREE.Mesh( meshObj.geometry, meshObj.material );
+				// 	console.log(meshObj.geometry);
+				// 	mesh.userData.uuid = meshObj.id;
+				// 	mesh.position.set( meshObj.location.x, meshObj.location.y, meshObj.location.z );
+				// 	scene.add( mesh );
+				// 	meshes.push(mesh);
+					
+				// }
+				
+								
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+
+				controls = new OrbitControls( camera, renderer.domElement );
+				controls.enableDamping = true;
+				controls.enableZoom = false;
+				controls.enablePan = false;
+
+				stats = new Stats();
+				document.body.appendChild( stats.dom );
+
+				window.addEventListener( 'resize', onWindowResize );
+				document.addEventListener( 'mousemove', onMouseMove );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function onMouseMove( event ) {
+
+				event.preventDefault();
+
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				controls.update();
+
+				raycaster.setFromCamera( mouse, camera );
+
+				const intersection = raycaster.intersectObjects( meshes );
+				// console.log("intersection", intersection);
+
+				if ( intersection.length > 0 ) {
+					let hitMesh = intersection[ 0 ].object;
+					let hitObj = objs.find( obj => obj.id === hitMesh.userData.uuid );
+					if (!hitObj.lightened) {
+						console.log("found", hitObj, 'id', hitObj.id, 'uuid', hitMesh.userData.uuid);
+						hitObj.lightened = true;
+						hitMesh.material.color.set( 0xff0000 );
+					}
+
+				}
+
+				render();
+
+				stats.update();
+
+			}
+
+			function render() {
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+	</body>
+</html>

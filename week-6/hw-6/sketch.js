@@ -29,10 +29,10 @@ async function askForModel(p_prompt) {
     };
     console.log("Asking for 3d model data From Replicate via Proxy", data);
     let options = {
+        // mode: "no-cors",
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "mode": "no-cors",
             // "Access-Control-Allow-Origin": "http://localhost:5500",
             // 'Access-Control-Allow-Credentials': true,
         },
