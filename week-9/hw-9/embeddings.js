@@ -1,3 +1,6 @@
+// import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js';
+// import { CinematicCamera } from 'https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/cameras/CinematicCamera.js';
+
 import * as THREE from 'three';
 import { CinematicCamera } from 'three/addons/cameras/CinematicCamera.js';
 
