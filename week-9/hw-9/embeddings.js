@@ -359,7 +359,7 @@ function animate() {
         console.log("intersects", intersects[0]);
         let object = intersects[0].object;
         console.log("object", object);
-        object.material.color.set( 0xff0000 );
+        // object.material.color.set( 0xff0000 );
         objects.forEach(o => {
             if (o.object.uuid == object.uuid) {
                 for (let i = 0; i < myClusters.length; i++) {
