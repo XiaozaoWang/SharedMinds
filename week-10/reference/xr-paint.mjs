@@ -1,3 +1,11 @@
+
+
+// import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js';
+// import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/controls/OrbitControls.js';
+// import { TubePainter } from 'https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/misc/TubePainter.js';
+// import { XRButton } from 'https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/webxr/XRButton.js';
+
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TubePainter } from 'three/addons/misc/TubePainter.js';
