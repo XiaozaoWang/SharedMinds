@@ -14,8 +14,6 @@ import { XRButton } from 'three/addons/webxr/XRButton.js';
 
 
 
-
-
 let camera, scene, renderer;
 let controller1, controller2;
 
