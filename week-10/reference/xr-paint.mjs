@@ -7,184 +7,189 @@
 
 
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { TubePainter } from 'three/addons/misc/TubePainter.js';
-import { XRButton } from 'three/addons/webxr/XRButton.js';
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// import { TubePainter } from 'three/addons/misc/TubePainter.js';
+// import { XRButton } from 'three/addons/webxr/XRButton.js';
 
-let camera, scene, renderer;
-let controller1, controller2;
 
-const cursor = new THREE.Vector3();
 
-let controls;
+console.log('hi');
 
-init();
-animate();
 
-function init() {
+// let camera, scene, renderer;
+// let controller1, controller2;
 
-    const container = document.createElement( 'div' );
-    document.body.appendChild( container );
+// const cursor = new THREE.Vector3();
 
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0x222222 );
+// let controls;
 
-    camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 50 );
-    camera.position.set( 0, 1.6, 3 );
+// init();
+// animate();
 
-    controls = new OrbitControls( camera, container );
-    controls.target.set( 0, 1.6, 0 );
-    controls.update();
+// function init() {
 
-    const grid = new THREE.GridHelper( 4, 1, 0x111111, 0x111111 );
-    scene.add( grid );
+//     const container = document.createElement( 'div' );
+//     document.body.appendChild( container );
 
-    scene.add( new THREE.HemisphereLight( 0x888877, 0x777788, 3 ) );
+//     scene = new THREE.Scene();
+//     scene.background = new THREE.Color( 0x222222 );
 
-    const light = new THREE.DirectionalLight( 0xffffff, 1.5 );
-    light.position.set( 0, 4, 0 );
-    scene.add( light );
+//     camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 50 );
+//     camera.position.set( 0, 1.6, 3 );
 
-    //
+//     controls = new OrbitControls( camera, container );
+//     controls.target.set( 0, 1.6, 0 );
+//     controls.update();
 
-    const painter1 = new TubePainter();
-    scene.add( painter1.mesh );
+//     const grid = new THREE.GridHelper( 4, 1, 0x111111, 0x111111 );
+//     scene.add( grid );
 
-    const painter2 = new TubePainter();
-    scene.add( painter2.mesh );
+//     scene.add( new THREE.HemisphereLight( 0x888877, 0x777788, 3 ) );
 
-    //
+//     const light = new THREE.DirectionalLight( 0xffffff, 1.5 );
+//     light.position.set( 0, 4, 0 );
+//     scene.add( light );
 
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.xr.enabled = true;
-    container.appendChild( renderer.domElement );
+//     //
 
-    document.body.appendChild( XRButton.createButton( renderer ) );
+//     const painter1 = new TubePainter();
+//     scene.add( painter1.mesh );
 
-    // controllers
+//     const painter2 = new TubePainter();
+//     scene.add( painter2.mesh );
 
-    function onSelectStart() {
+//     //
 
-        this.updateMatrixWorld( true );
+//     renderer = new THREE.WebGLRenderer( { antialias: true } );
+//     renderer.setPixelRatio( window.devicePixelRatio );
+//     renderer.setSize( window.innerWidth, window.innerHeight );
+//     renderer.xr.enabled = true;
+//     container.appendChild( renderer.domElement );
 
-        const pivot = this.getObjectByName( 'pivot' );
-        cursor.setFromMatrixPosition( pivot.matrixWorld );
+//     document.body.appendChild( XRButton.createButton( renderer ) );
 
-        const painter = this.userData.painter;
-        painter.moveTo( cursor );
+//     // controllers
 
-        this.userData.isSelecting = true;
+//     function onSelectStart() {
 
-    }
+//         this.updateMatrixWorld( true );
 
-    function onSelectEnd() {
+//         const pivot = this.getObjectByName( 'pivot' );
+//         cursor.setFromMatrixPosition( pivot.matrixWorld );
 
-        this.userData.isSelecting = false;
+//         const painter = this.userData.painter;
+//         painter.moveTo( cursor );
 
-    }
+//         this.userData.isSelecting = true;
 
-    function onSqueezeStart() {
+//     }
 
-        this.userData.isSqueezing = true;
-        this.userData.positionAtSqueezeStart = this.position.y;
-        this.userData.scaleAtSqueezeStart = this.scale.x;
+//     function onSelectEnd() {
 
-    }
+//         this.userData.isSelecting = false;
 
-    function onSqueezeEnd() {
+//     }
 
-        this.userData.isSqueezing = false;
+//     function onSqueezeStart() {
 
-    }
+//         this.userData.isSqueezing = true;
+//         this.userData.positionAtSqueezeStart = this.position.y;
+//         this.userData.scaleAtSqueezeStart = this.scale.x;
 
-    controller1 = renderer.xr.getController( 0 );
-    controller1.addEventListener( 'selectstart', onSelectStart );
-    controller1.addEventListener( 'selectend', onSelectEnd );
-    controller1.addEventListener( 'squeezestart', onSqueezeStart );
-    controller1.addEventListener( 'squeezeend', onSqueezeEnd );
-    controller1.userData.painter = painter1;
-    scene.add( controller1 );
+//     }
 
-    controller2 = renderer.xr.getController( 1 );
-    controller2.addEventListener( 'selectstart', onSelectStart );
-    controller2.addEventListener( 'selectend', onSelectEnd );
-    controller2.addEventListener( 'squeezestart', onSqueezeStart );
-    controller2.addEventListener( 'squeezeend', onSqueezeEnd );
-    controller2.userData.painter = painter2;
-    scene.add( controller2 );
+//     function onSqueezeEnd() {
 
-    //
+//         this.userData.isSqueezing = false;
 
-    const pivot = new THREE.Mesh( new THREE.IcosahedronGeometry( 0.01, 3 ) );
-    pivot.name = 'pivot';
-    pivot.position.z = - 0.05;
+//     }
 
-    const group = new THREE.Group();
-    group.add( pivot );
+//     controller1 = renderer.xr.getController( 0 );
+//     controller1.addEventListener( 'selectstart', onSelectStart );
+//     controller1.addEventListener( 'selectend', onSelectEnd );
+//     controller1.addEventListener( 'squeezestart', onSqueezeStart );
+//     controller1.addEventListener( 'squeezeend', onSqueezeEnd );
+//     controller1.userData.painter = painter1;
+//     scene.add( controller1 );
 
-    controller1.add( group.clone() );
-    controller2.add( group.clone() );
+//     controller2 = renderer.xr.getController( 1 );
+//     controller2.addEventListener( 'selectstart', onSelectStart );
+//     controller2.addEventListener( 'selectend', onSelectEnd );
+//     controller2.addEventListener( 'squeezestart', onSqueezeStart );
+//     controller2.addEventListener( 'squeezeend', onSqueezeEnd );
+//     controller2.userData.painter = painter2;
+//     scene.add( controller2 );
 
-    //
+//     //
 
-    window.addEventListener( 'resize', onWindowResize );
+//     const pivot = new THREE.Mesh( new THREE.IcosahedronGeometry( 0.01, 3 ) );
+//     pivot.name = 'pivot';
+//     pivot.position.z = - 0.05;
 
-}
+//     const group = new THREE.Group();
+//     group.add( pivot );
 
-function onWindowResize() {
+//     controller1.add( group.clone() );
+//     controller2.add( group.clone() );
 
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+//     //
 
-    renderer.setSize( window.innerWidth, window.innerHeight );
+//     window.addEventListener( 'resize', onWindowResize );
 
-}
+// }
 
-//
+// function onWindowResize() {
 
-function handleController( controller ) {
+//     camera.aspect = window.innerWidth / window.innerHeight;
+//     camera.updateProjectionMatrix();
 
-    controller.updateMatrixWorld( true );
+//     renderer.setSize( window.innerWidth, window.innerHeight );
 
-    const userData = controller.userData;
-    const painter = userData.painter;
+// }
 
-    const pivot = controller.getObjectByName( 'pivot' );
+// //
 
-    if ( userData.isSqueezing === true ) {
+// function handleController( controller ) {
 
-        const delta = ( controller.position.y - userData.positionAtSqueezeStart ) * 5;
-        const scale = Math.max( 0.1, userData.scaleAtSqueezeStart + delta );
+//     controller.updateMatrixWorld( true );
 
-        pivot.scale.setScalar( scale );
-        painter.setSize( scale );
+//     const userData = controller.userData;
+//     const painter = userData.painter;
 
-    }
+//     const pivot = controller.getObjectByName( 'pivot' );
 
-    cursor.setFromMatrixPosition( pivot.matrixWorld );
+//     if ( userData.isSqueezing === true ) {
 
-    if ( userData.isSelecting === true ) {
+//         const delta = ( controller.position.y - userData.positionAtSqueezeStart ) * 5;
+//         const scale = Math.max( 0.1, userData.scaleAtSqueezeStart + delta );
 
-        painter.lineTo( cursor );
-        painter.update();
+//         pivot.scale.setScalar( scale );
+//         painter.setSize( scale );
 
-    }
+//     }
 
-}
+//     cursor.setFromMatrixPosition( pivot.matrixWorld );
 
-function animate() {
+//     if ( userData.isSelecting === true ) {
 
-    renderer.setAnimationLoop( render );
+//         painter.lineTo( cursor );
+//         painter.update();
 
-}
+//     }
 
-function render() {
+// }
 
-    handleController( controller1 );
-    handleController( controller2 );
+// function animate() {
 
-    renderer.render( scene, camera );
+//     renderer.setAnimationLoop( render );
 
-}
+// }
+
+// function render() {
+
+//     handleController( controller1 );
+//     handleController( controller2 );
+
+//     renderer.render( scene, camera );
+
+// }
