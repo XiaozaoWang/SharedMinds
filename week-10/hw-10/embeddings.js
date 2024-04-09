@@ -18,6 +18,8 @@ const radius = 100;
 let controller, controllerGrip;
 let INTERSECTED;
 
+let room;
+
 
 const replicateProxy = "https://replicate-api-proxy.glitch.me"
 let objects = [];
@@ -66,13 +68,12 @@ function initWebInterface() {
     }
     askForEmbeddings(dataForReplicate);
 
-    // document.addEventListener( 'mousemove', onDocumentMouseMove );
 }
 
 
 function init3D() {
     scene = new THREE.Scene();
-    camera3D = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 200 );
+    camera3D = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 50 );
     camera3D.position.set( 0, 1.6, 3 );
     scene.add( camera3D );
 
@@ -80,11 +81,17 @@ function init3D() {
     // add a cube in front of the camera
     const cubegeometry = new THREE.BoxGeometry(1, 1, 1);
     const cubematerial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
+    const cube = new THREE.Mesh(cubegeometry, cubematerial);
     cube.position.set(0, 0, -1); // position the cube in front of the camera
     scene.add(cube);
 
-    camera3D.lookAt(cube);
+    // camera3D.lookAt(cube);
+
+    room = new THREE.LineSegments(
+        new BoxLineGeometry( 6, 6, 6, 10, 10, 10 ).translate( 0, 3, 0 ),
+        new THREE.LineBasicMaterial( { color: 0xbcbcbc } )
+    );
+    scene.add( room );
 
     scene.add( new THREE.HemisphereLight( 0xa5a5a5, 0x898989, 3 ) );
 
@@ -93,27 +100,48 @@ function init3D() {
     scene.add( light );
 
 
-    //just a place holder the follows the camera and marks location to drop incoming  pictures
-    //tiny little dot (could be invisible) 
-    // var geometryFront = new THREE.BoxGeometry(1, 1, 1);
-    // var materialFront = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    // in_front_of_you = new THREE.Mesh(geometryFront, materialFront);
-    // camera3D.add(in_front_of_you); // then add in front of the camera (not scene) so it follow it
-    // console.log("in_front_of_you.position", in_front_of_you.position)
+    const boxgeometry = new THREE.BoxGeometry( 0.15, 0.15, 0.15 );
+
+    for ( let i = 0; i < 200; i ++ ) {
+
+        const object = new THREE.Mesh( boxgeometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
+
+        object.position.x = Math.random() * 4 - 2;
+        object.position.y = Math.random() * 4;
+        object.position.z = Math.random() * 4 - 2;
+
+        object.rotation.x = Math.random() * 2 * Math.PI;
+        object.rotation.y = Math.random() * 2 * Math.PI;
+        object.rotation.z = Math.random() * 2 * Math.PI;
+
+        object.scale.x = Math.random() + 0.5;
+        object.scale.y = Math.random() + 0.5;
+        object.scale.z = Math.random() + 0.5;
+
+        object.userData.velocity = new THREE.Vector3();
+        object.userData.velocity.x = Math.random() * 0.01 - 0.005;
+        object.userData.velocity.y = Math.random() * 0.01 - 0.005;
+        object.userData.velocity.z = Math.random() * 0.01 - 0.005;
+
+        room.add( object );
+
+    }
+
+
 
     // lattice
-    var geometry = new THREE.SphereGeometry(0.02, 32, 32);
-    var material = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    // create a grid of spheres
-    for (let i = 0; i < 100; i+=8) {
-        for (let j = 0; j < 100; j+=8) {
-            for (let k = 0; k < 100; k+=8) {
-                var sphere = new THREE.Mesh(geometry, material);
-                scene.add(sphere);
-                sphere.position.set(i - 50, j - 50, k - 50); 
-            }
-        }
-    }
+    // var geometry = new THREE.SphereGeometry(0.02, 32, 32);
+    // var material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    // // create a grid of spheres
+    // for (let i = 0; i < 100; i+=8) {
+    //     for (let j = 0; j < 100; j+=8) {
+    //         for (let k = 0; k < 100; k+=8) {
+    //             var sphere = new THREE.Mesh(geometry, material);
+    //             scene.add(sphere);
+    //             sphere.position.set(i - 50, j - 50, k - 50); 
+    //         }
+    //     }
+    // }
 
     raycaster = new THREE.Raycaster();
 
@@ -226,7 +254,7 @@ function runUMAP(embeddingsAndPrompts) {
     let fittings = umap.fit(embeddings);
     fittings = normalize(fittings);  //normalize to 0-1
     for (let i = 0; i < embeddingsAndPrompts.length; i++) {
-        placeMesh(embeddingsAndPrompts[i].input, fittings[i]);
+        // placeMesh(embeddingsAndPrompts[i].input, fittings[i]);
     }
     // document.getElementById("feedback").innerHTML = "UMAP generated";
 }
@@ -249,7 +277,7 @@ function placeMesh(text, pos) {
 
     console.log("mesh.position", mesh.position, 'text', text);
     mesh.lookAt(0, 0, 0);
-    scene.add(mesh);
+    room.add(mesh);
     hitTestableThings.push(mesh);//make a list for the raycaster to check for intersection
     objects.push({ "object": mesh, "uuid": mesh.uuid, "text": text});
 }
@@ -342,25 +370,25 @@ function render() {
 
     const delta = clock.getDelta() * 60;
 
-    // if ( controller.userData.isSelecting === true ) {
+    if ( controller.userData.isSelecting === true ) {
 
-    //     const cube = scene.children[ 0 ];
-    //     room.remove( cube );
+        const cube = room.children[ 0 ];
+        room.remove( cube );
 
-    //     cube.position.copy( controller.position );
-    //     cube.userData.velocity.x = ( Math.random() - 0.5 ) * 0.02 * delta;
-    //     cube.userData.velocity.y = ( Math.random() - 0.5 ) * 0.02 * delta;
-    //     cube.userData.velocity.z = ( Math.random() * 0.01 - 0.05 ) * delta;
-    //     cube.userData.velocity.applyQuaternion( controller.quaternion );
-    //     room.add( cube );
+        cube.position.copy( controller.position );
+        cube.userData.velocity.x = ( Math.random() - 0.5 ) * 0.02 * delta;
+        cube.userData.velocity.y = ( Math.random() - 0.5 ) * 0.02 * delta;
+        cube.userData.velocity.z = ( Math.random() * 0.01 - 0.05 ) * delta;
+        cube.userData.velocity.applyQuaternion( controller.quaternion );
+        room.add( cube );
 
-    // }
+    }
 
-    // find intersections
+    // find intersections 
 
     raycaster.setFromXRController( controller );
 
-    const intersects = raycaster.intersectObjects( scene.children, false );
+    const intersects = raycaster.intersectObjects( room.children, false );
 
     if ( intersects.length > 0 ) {
 
