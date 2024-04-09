@@ -72,9 +72,17 @@ function initWebInterface() {
 
 function init3D() {
     scene = new THREE.Scene();
-    camera3D = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 50 );
+    camera3D = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.01, 200 );
     camera3D.position.set( 0, 1.6, 3 );
     scene.add( camera3D );
+
+
+    // add a cube in front of the camera
+    const cubegeometry = new THREE.BoxGeometry(1, 1, 1);
+    const cubematerial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(geometry, material);
+    cube.position.set(0, 0, -1); // position the cube in front of the camera
+    scene.add(cube);
 
 
     scene.add( new THREE.HemisphereLight( 0xa5a5a5, 0x898989, 3 ) );
