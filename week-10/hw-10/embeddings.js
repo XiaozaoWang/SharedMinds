@@ -100,32 +100,32 @@ function init3D() {
     scene.add( light );
 
 
-    const boxgeometry = new THREE.BoxGeometry( 0.15, 0.15, 0.15 );
+    // const boxgeometry = new THREE.BoxGeometry( 0.15, 0.15, 0.15 );
 
-    for ( let i = 0; i < 200; i ++ ) {
+    // for ( let i = 0; i < 200; i ++ ) {
 
-        const object = new THREE.Mesh( boxgeometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
+    //     const object = new THREE.Mesh( boxgeometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
 
-        object.position.x = Math.random() * 4 - 2;
-        object.position.y = Math.random() * 4;
-        object.position.z = Math.random() * 4 - 2;
+    //     object.position.x = Math.random() * 4 - 2;
+    //     object.position.y = Math.random() * 4;
+    //     object.position.z = Math.random() * 4 - 2;
 
-        object.rotation.x = Math.random() * 2 * Math.PI;
-        object.rotation.y = Math.random() * 2 * Math.PI;
-        object.rotation.z = Math.random() * 2 * Math.PI;
+    //     object.rotation.x = Math.random() * 2 * Math.PI;
+    //     object.rotation.y = Math.random() * 2 * Math.PI;
+    //     object.rotation.z = Math.random() * 2 * Math.PI;
 
-        object.scale.x = Math.random() + 0.5;
-        object.scale.y = Math.random() + 0.5;
-        object.scale.z = Math.random() + 0.5;
+    //     object.scale.x = Math.random() + 0.5;
+    //     object.scale.y = Math.random() + 0.5;
+    //     object.scale.z = Math.random() + 0.5;
 
-        object.userData.velocity = new THREE.Vector3();
-        object.userData.velocity.x = Math.random() * 0.01 - 0.005;
-        object.userData.velocity.y = Math.random() * 0.01 - 0.005;
-        object.userData.velocity.z = Math.random() * 0.01 - 0.005;
+    //     object.userData.velocity = new THREE.Vector3();
+    //     object.userData.velocity.x = Math.random() * 0.01 - 0.005;
+    //     object.userData.velocity.y = Math.random() * 0.01 - 0.005;
+    //     object.userData.velocity.z = Math.random() * 0.01 - 0.005;
 
-        room.add( object );
+    //     room.add( object );
 
-    }
+    // }
 
 
 
