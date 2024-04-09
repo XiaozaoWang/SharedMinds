@@ -8,7 +8,7 @@ import { XRControllerModelFactory } from 'three/addons/webxr/XRControllerModelFa
 const clock = new THREE.Clock();
 
 
-let distanceFromCenter = 8;
+let distanceFromCenter = 2;
 
 let ThreeJSContainer;
 let camera3D, scene, renderer, raycaster;
@@ -78,12 +78,7 @@ function init3D() {
     scene.add( camera3D );
 
 
-    // add a cube in front of the camera
-    const cubegeometry = new THREE.BoxGeometry(1, 1, 1);
-    const cubematerial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(cubegeometry, cubematerial);
-    cube.position.set(0, 0, -1); // position the cube in front of the camera
-    scene.add(cube);
+
 
     // camera3D.lookAt(cube);
 
@@ -92,6 +87,13 @@ function init3D() {
         new THREE.LineBasicMaterial( { color: 0xbcbcbc } )
     );
     scene.add( room );
+
+    // add a cube in front of the camera
+    const cubegeometry = new THREE.BoxGeometry(1, 1, 1);
+    const cubematerial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(cubegeometry, cubematerial);
+    cube.position.set(0, 2, 0); // position the cube in front of the camera
+    room.add(cube);
 
     scene.add( new THREE.HemisphereLight( 0xa5a5a5, 0x898989, 3 ) );
 
@@ -254,6 +256,7 @@ function runUMAP(embeddingsAndPrompts) {
     let fittings = umap.fit(embeddings);
     fittings = normalize(fittings);  //normalize to 0-1
     for (let i = 0; i < embeddingsAndPrompts.length; i++) {
+        // console.log("fitting", fittings[i]);
         placeMesh(embeddingsAndPrompts[i].input, fittings[i]);
     }
     // document.getElementById("feedback").innerHTML = "UMAP generated";
@@ -272,7 +275,7 @@ function placeMesh(text, pos) {
     var mesh = new THREE.Mesh(geo, material);
 
     mesh.position.x = pos[0] * distanceFromCenter - distanceFromCenter / 2;
-    mesh.position.y = pos[1] * distanceFromCenter - distanceFromCenter / 2;  
+    mesh.position.y = pos[1] * distanceFromCenter - distanceFromCenter / 2 + 2;  
     mesh.position.z = pos[2] * distanceFromCenter - distanceFromCenter / 2;
 
     console.log("mesh.position", mesh.position, 'text', text);
