@@ -254,7 +254,7 @@ function runUMAP(embeddingsAndPrompts) {
     let fittings = umap.fit(embeddings);
     fittings = normalize(fittings);  //normalize to 0-1
     for (let i = 0; i < embeddingsAndPrompts.length; i++) {
-        // placeMesh(embeddingsAndPrompts[i].input, fittings[i]);
+        placeMesh(embeddingsAndPrompts[i].input, fittings[i]);
     }
     // document.getElementById("feedback").innerHTML = "UMAP generated";
 }
