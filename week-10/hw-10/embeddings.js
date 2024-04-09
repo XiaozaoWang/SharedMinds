@@ -84,6 +84,7 @@ function init3D() {
     cube.position.set(0, 0, -1); // position the cube in front of the camera
     scene.add(cube);
 
+    camera3D.lookAt(cube);
 
     scene.add( new THREE.HemisphereLight( 0xa5a5a5, 0x898989, 3 ) );
 
@@ -177,7 +178,7 @@ function initLocalStorage() {
 
 // called after reading the prompts data
 async function askForEmbeddings(p_prompt) {
-    document.getElementById("feedback").innerHTML = "Getting Embeddings...";
+    // document.getElementById("feedback").innerHTML = "Getting Embeddings...";
     let promptInLines = p_prompt.replace(/,/g, "\n");
     let data = {
         version: "75b33f253f7714a281ad3e9b28f63e3232d583716ef6718f2e46641077ea040a",
@@ -227,7 +228,7 @@ function runUMAP(embeddingsAndPrompts) {
     for (let i = 0; i < embeddingsAndPrompts.length; i++) {
         placeMesh(embeddingsAndPrompts[i].input, fittings[i]);
     }
-    document.getElementById("feedback").innerHTML = "UMAP generated";
+    // document.getElementById("feedback").innerHTML = "UMAP generated";
 }
 
 function placeMesh(text, pos) {
