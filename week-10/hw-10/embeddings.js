@@ -391,27 +391,30 @@ function render() {
 
     raycaster.setFromXRController( controller );
 
-    const intersects = raycaster.intersectObjects( room.children, false );
+    const intersects = raycaster.intersectObjects( hitTestableThings, false );
 
     if ( intersects.length > 0 ) {
 
-        if ( INTERSECTED != intersects[ 0 ].object ) {
+        console.log("intersects", intersects[0]);
+        let object = intersects[0].object;
+        console.log("object", object);
+        // object.material.color.set( 0xff0000 );
+        objects.forEach(o => {
+            if (o.object.uuid == object.uuid) {
+                for (let i = 0; i < myClusters.length; i++) {
+                    if (myClusters[i].arr.includes(o.text)) {
+                        o.text = `[${myClusters[i].name}] ${o.text}`
+                        break;
+                    }
+                }
+                object.material.color.set(0xff0000);
+                
 
-            if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+            }
+        });
 
-            INTERSECTED = intersects[ 0 ].object;
-            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-            INTERSECTED.material.emissive.setHex( 0xff0000 );
+    } 
 
-        }
-
-    } else {
-
-        if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-
-        INTERSECTED = undefined;
-
-    }
     
 
     // const intersects = raycaster.intersectObjects( hitTestableThings, false );
