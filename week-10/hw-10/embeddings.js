@@ -373,19 +373,19 @@ function render() {
 
     const delta = clock.getDelta() * 60;
 
-    if ( controller.userData.isSelecting === true ) {
+    // if ( controller.userData.isSelecting === true ) {
 
-        const cube = room.children[ 0 ];
-        room.remove( cube );
+    //     const cube = room.children[ 0 ];
+    //     room.remove( cube );
 
-        cube.position.copy( controller.position );
-        cube.userData.velocity.x = ( Math.random() - 0.5 ) * 0.02 * delta;
-        cube.userData.velocity.y = ( Math.random() - 0.5 ) * 0.02 * delta;
-        cube.userData.velocity.z = ( Math.random() * 0.01 - 0.05 ) * delta;
-        cube.userData.velocity.applyQuaternion( controller.quaternion );
-        room.add( cube );
+    //     cube.position.copy( controller.position );
+    //     cube.userData.velocity.x = ( Math.random() - 0.5 ) * 0.02 * delta;
+    //     cube.userData.velocity.y = ( Math.random() - 0.5 ) * 0.02 * delta;
+    //     cube.userData.velocity.z = ( Math.random() * 0.01 - 0.05 ) * delta;
+    //     cube.userData.velocity.applyQuaternion( controller.quaternion );
+    //     room.add( cube );
 
-    }
+    // }
 
     // find intersections 
 
