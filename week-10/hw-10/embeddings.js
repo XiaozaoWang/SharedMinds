@@ -393,25 +393,25 @@ function render() {
 
     const intersects = raycaster.intersectObjects( room.children, false );
 
-    // if ( intersects.length > 0 ) {
+    if ( intersects.length > 0 ) {
 
-    //     if ( INTERSECTED != intersects[ 0 ].object ) {
+        if ( INTERSECTED != intersects[ 0 ].object ) {
 
-    //         if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+            if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
 
-    //         INTERSECTED = intersects[ 0 ].object;
-    //         INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-    //         INTERSECTED.material.emissive.setHex( 0xff0000 );
+            INTERSECTED = intersects[ 0 ].object;
+            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+            INTERSECTED.material.emissive.setHex( 0xff0000 );
 
-    //     }
+        }
 
-    // } else {
+    } else {
 
-    //     if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+        if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
 
-    //     INTERSECTED = undefined;
+        INTERSECTED = undefined;
 
-    // }
+    }
     
 
     // const intersects = raycaster.intersectObjects( hitTestableThings, false );
