@@ -10,3 +10,4 @@ List of live pages for assignments:
 8. W8: https://xiaozaowang.github.io/SharedMinds/week-8/hw-8/firebaseClass.html
 9. W9: https://xiaozaowang.github.io/SharedMinds/week-9/hw-9/index.html
 10. W10:https://xiaozaowang.github.io/SharedMinds/week-10/hw-10/index.html
+11. Final Project milestone 1: https://xiaozaowang.github.io/SharedMinds/final-project/index.html

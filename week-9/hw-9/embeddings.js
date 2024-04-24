@@ -209,6 +209,7 @@ function runUMAP(embeddingsAndPrompts) {
     });
     let fittings = umap.fit(embeddings);
     fittings = normalize(fittings);  //normalize to 0-1
+    console.log("fittings", fittings);
     for (let i = 0; i < embeddingsAndPrompts.length; i++) {
         placeMesh(embeddingsAndPrompts[i].input, fittings[i]);
     }
