@@ -45,11 +45,11 @@ function initWebInterface() {
 
     webInterfaceContainer.style.position = "absolute";
     webInterfaceContainer.style.zIndex = "200";
-    webInterfaceContainer.style.top = "15%";
-    webInterfaceContainer.style.left = "50%";
-    webInterfaceContainer.style.transform = "translate(-50%, -50%)";
-    webInterfaceContainer.style.position = "absolute";
-    webInterfaceContainer.style.height = "20%";
+    // webInterfaceContainer.style.top = "15%";
+    // webInterfaceContainer.style.left = "50%";
+    // webInterfaceContainer.style.transform = "translate(-50%, -50%)";
+    // webInterfaceContainer.style.position = "absolute";
+    // webInterfaceContainer.style.height = "20%";
     //webInterfaceContainer.append(input_image_field);
     document.body.append(webInterfaceContainer);
 
@@ -199,6 +199,8 @@ function initLocalStorage() {
 }
 
 function getDataFromFirebase() {
+    // disable the button
+    document.getElementsByClassName("button")[0].style.display = "none";
     const firebaseConfig = {
         apiKey: "AIzaSyBN5nwXdCVS9hRgrzIlKLg7c1Gv4Nc-sAw",
         authDomain: "shared-minds-a64d0.firebaseapp.com",

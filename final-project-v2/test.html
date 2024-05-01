@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label for="nNeighborsSlider">Number of Neighbors:</label>
+    <input id="nNeighborsSlider" type="range" min="3" max="200" step="1" value="15" onchange="handleSliderChange()">
+    <script>
+        const slider = document.getElementById("nNeighborsSlider");
+        slider.addEventListener("input", handleSliderChange);
+
+        function handleSliderChange() {
+            const value = slider.value;
+            console.log("Slider value:", value);
+            // Do something with the slider value
+        }
+    </script>
+</body>
+</html>

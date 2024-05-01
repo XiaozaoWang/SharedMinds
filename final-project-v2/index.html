@@ -1,0 +1,67 @@
+<html>
+
+<head>
+    <title>Embeddings</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js"></script> -->
+<script src="umap-js.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js">
+</script>
+
+<script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/"
+      }
+    }
+</script>
+
+
+<body>
+
+  <div id="ThreeJSContainer">
+
+  </div>
+
+  <div id="sliders-container">
+    <label for="nNeighborsSlider">Number of Neighbors: <span id="nNei">18</span></label>
+    <input id="nNeighborsSlider" type="range" min="3" max="30" step="1" value="18">
+    
+    <label for="minDistSlider">Minimum Distance: <span id="mDis">0.40</span></label>
+    <input id="minDistSlider" type="range" min="0.01" max="0.99" step="0.01" value="0.40">
+    
+    <label for="distributionSlider">Distribution: <span id="Dis">10</span></label>
+    <input id="distributionSlider" type="range" min="5" max="15" step="1" value="10">
+  </div>
+
+  <button id="loadDataButton" class="button">Load Data</button>
+  <div id="feedback"></div>
+
+  <div class='switch-container'>
+      <p>Points</p>
+      <label class="switch">
+      <input type="checkbox" id="toggleButton" >
+      <span class="slider round"></span>
+      </label>
+      <p>Images</p>
+  </div>
+
+  <div id="image-container">
+    <p id="placeholder-text">Full image</p>
+    <img src="" id="full-img">
+  </div>
+
+  <div id="cursor-circle"></div>
+
+
+  
+    <script src="embeddings.js" type="module"></script>
+</body>
+
+</html>
