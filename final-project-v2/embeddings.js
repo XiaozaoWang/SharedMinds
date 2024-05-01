@@ -217,7 +217,7 @@ function getDataFromFirebase() {
         }
         console.log("Items List length:", itemsList.length);
         console.log("Items List", itemsList);
-        runUMAP(itemsList, 18, 0.40, 10);
+        runUMAP(itemsList, 18, 0.40, 7);
         
     });
 }
@@ -364,6 +364,16 @@ function placeMesh(label, classname, pos, base64, distanceFromCenter, averageDis
     planeMesh.lookAt(camera3D.position);
     scene.add(planeMesh);
     planes.push({ "object": planeMesh, "uuid": planeMesh.uuid, "label": label, "base64": base64 });
+
+    // determine whether to display the spheres or the planes
+    let toggleButton = document.getElementById("toggleButton");
+    if (toggleButton.checked) {
+        for (let obj of spheres) { obj.object.visible = false; }
+        for (let obj of planes) { obj.object.visible = true; }
+    } else {
+        for (let obj of spheres) { obj.object.visible = true; }
+        for (let obj of planes) { obj.object.visible = false; }
+    }
 }
 
 function getColor(label) {
@@ -480,8 +490,9 @@ function animate() {
 
         spheres.forEach(o => {
             if (o.object.uuid == object.uuid) {
-                document.getElementById("feedback").innerText = "Current class: " + o.classname;
-                document.addEventListener("click", function() {
+                document.getElementById("feedback").innerText = "Current class: " + o.classname + " Current label: " + o.label;
+                document.getElementById("label").innerText = o.classname;
+                document.addEventListener("dblclick", function() {
                     let placeholder = document.getElementById("placeholder-text");
                     placeholder.style.display = "none";
                     let imgDisplay = document.getElementById("full-img");
